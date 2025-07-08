@@ -103,3 +103,29 @@ class DAO():
             cursor.close()
             conn.close()
         return result
+
+
+    @staticmethod
+    def getter_numeroGare_inRange(circuitId, yearInf, yearSup):
+        """
+        :return: lista di tuple contenenti gli attributi selezionati dalla query
+        """
+        conn = DBConnect.get_connection()
+        result = 0
+        if conn is None:
+            print("Connection failed")
+        else:
+            cursor = conn.cursor()
+            query = """
+            select count(distinct raceId)
+            from races r 
+            where circuitId = %s
+            and year > %s
+            and year < %s
+            """
+            cursor.execute(query, (circuitId, yearInf, yearSup))
+            for row in cursor:
+                result += row[0] #row è una tupla contenente tutti gli attributi selezionati dalla query
+            cursor.close()
+            conn.close()
+        return result
